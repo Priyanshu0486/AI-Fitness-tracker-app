@@ -224,9 +224,13 @@ User → Frontend → Gateway → Activity Service → MongoDB
 ## 🖥️ Screenshots
 
 ### Activities Page
+<img width="1919" height="862" alt="Screenshot 2026-02-26 211355" src="https://github.com/user-attachments/assets/6f4ed8cb-8c55-446f-b3b7-6df26604b77d" />
+
 > Dark-themed dashboard with activity logging form and activity cards with hover animations
 
 ### Activity Details
+<img width="1892" height="858" alt="Screenshot 2026-02-26 211415" src="https://github.com/user-attachments/assets/964edd68-411e-44bc-a63f-3d63ba84212f" />
+
 > Detailed view with stats cards (type, duration, calories), AI-generated analysis, improvements, workout suggestions, and safety guidelines
 
 ---
