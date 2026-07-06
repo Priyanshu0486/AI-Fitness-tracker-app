@@ -49,6 +49,9 @@ services:
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-password}
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+      KC_HOSTNAME: https://priyanshu-fitness.duckdns.org
+      KC_PROXY_HEADERS: xforwarded
+      KC_HTTP_ENABLED: "true"
     ports:
       - "8181:8080"
     depends_on:
@@ -86,7 +89,7 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka
       SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/fitness-oauth2/protocol/openid-connect/certs
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://localhost:8181/realms/fitness-oauth2
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: https://priyanshu-fitness.duckdns.org/realms/fitness-oauth2
     depends_on:
       - config-server
       - eureka
@@ -158,6 +161,24 @@ services:
     networks:
       - fitness-network
 
+  # Reverse Proxy (HTTPS)
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+      - gateway
+      - keycloak
+    networks:
+      - fitness-network
+
 networks:
   fitness-network:
     driver: bridge
@@ -165,3 +186,5 @@ networks:
 volumes:
   postgres-data:
   mongodb-data:
+  caddy_data:
+  caddy_config:
