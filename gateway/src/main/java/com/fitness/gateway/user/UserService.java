@@ -23,11 +23,13 @@ public class UserService {
                 .bodyToMono(Boolean.class)
                 .onErrorResume(WebClientResponseException.class, e -> {
                     if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
-                        return Mono.error(new RuntimeException("User not found"));
+                        log.info("User not found (new user), returning false");
+                        return Mono.just(false);
                     } else if (e.getStatusCode() == HttpStatus.BAD_REQUEST) {
-                        return Mono.error(new RuntimeException("UserId Invalid"));
+                        log.warn("Bad request validating user: {}", e.getMessage());
+                        return Mono.just(false);
                     }
-                    return Mono.error(e);
+                    return Mono.just(false);
                 });
     }
 

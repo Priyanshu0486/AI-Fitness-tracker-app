@@ -25,19 +25,38 @@ public class KeycloakUserSyncFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String userId = exchange.getRequest().getHeaders().getFirst("X-User-ID");
         String token = exchange.getRequest().getHeaders().getFirst("Authorization");
+
+        // Skip sync if no token present
+        if (token == null) {
+            return chain.filter(exchange);
+        }
+
         RegisterRequest request = getUserDetailsFromToken(token);
+        if (request == null) {
+            return chain.filter(exchange);
+        }
+
         if (userId == null) {
             userId = request.getKeycloakId();
         }
         final String finalUserId = userId;
-        if (finalUserId != null && token != null) {
+        if (finalUserId != null) {
             return userService.validateUser(finalUserId)
+                    .onErrorResume(e -> {
+                        log.warn("Error validating user, skipping sync: {}", e.getMessage());
+                        return Mono.just(false);
+                    })
                     .flatMap(exist -> {
                         if (!exist) {
                             // register
                             RegisterRequest registerRequest = getUserDetailsFromToken(token);
                             if (registerRequest != null) {
-                                return userService.register(registerRequest).then(Mono.empty());
+                                return userService.register(registerRequest)
+                                        .onErrorResume(e -> {
+                                            log.warn("Error registering user, skipping: {}", e.getMessage());
+                                            return Mono.empty();
+                                        })
+                                        .then(Mono.empty());
                             } else {
                                 return Mono.empty();
                             }
