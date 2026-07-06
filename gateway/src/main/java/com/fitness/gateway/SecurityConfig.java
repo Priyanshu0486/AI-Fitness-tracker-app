@@ -20,6 +20,7 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .cors(Customizer.withDefaults())
                 .authorizeExchange(exchange -> exchange
                         // .pathMatchers("/actuator/**").permitAll()
                         .anyExchange().authenticated())
@@ -31,7 +32,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of("https://priyanshu-fitness.duckdns.org"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type","X-User-ID"));
         config.setAllowCredentials(true);
