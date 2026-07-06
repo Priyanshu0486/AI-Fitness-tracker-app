@@ -63,9 +63,18 @@ public class KeycloakUserSyncFilter implements WebFilter {
             SignedJWT signedJWT = SignedJWT.parse(tokenWithoutBearer);
             JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
             RegisterRequest registerRequest = new RegisterRequest();
-            registerRequest.setEmail(claims.getStringClaim("email"));
-            registerRequest.setFirstName(claims.getStringClaim("given_name"));
-            registerRequest.setLastName(claims.getStringClaim("family_name"));
+            String email = claims.getStringClaim("email");
+            if (email == null) {
+                email = claims.getStringClaim("preferred_username") + "@test.com";
+            }
+            registerRequest.setEmail(email);
+            
+            String firstName = claims.getStringClaim("given_name");
+            registerRequest.setFirstName(firstName != null ? firstName : "User");
+            
+            String lastName = claims.getStringClaim("family_name");
+            registerRequest.setLastName(lastName != null ? lastName : "");
+            
             registerRequest.setKeycloakId(claims.getStringClaim("sub"));
             registerRequest.setPassword("dummy123123");
             return registerRequest;
