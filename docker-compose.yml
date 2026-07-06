@@ -84,7 +84,7 @@ services:
     ports:
       - "8761:8761"
     environment:
-      SPRING_CONFIG_IMPORT: "optional:configserver:http://config-server:8888"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
     depends_on:
       - config-server
     networks:
@@ -99,7 +99,7 @@ services:
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
       EUREKA_INSTANCE_HOSTNAME: gateway
-      SPRING_CONFIG_IMPORT: "optional:configserver:http://config-server:8888"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/fitness-oauth2/protocol/openid-connect/certs
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: https://priyanshu-fitness.duckdns.org/realms/fitness-oauth2
     depends_on:
@@ -117,7 +117,7 @@ services:
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
       EUREKA_INSTANCE_HOSTNAME: user-service
-      SPRING_CONFIG_IMPORT: "optional:configserver:http://config-server:8888"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-fitness_tracker}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-postgres}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-password}
@@ -137,7 +137,7 @@ services:
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
       EUREKA_INSTANCE_HOSTNAME: activity-service
-      SPRING_CONFIG_IMPORT: "optional:configserver:http://config-server:8888"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
       SPRING_DATA_MONGODB_URI: mongodb://${MONGO_USER:-root}:${MONGO_PASSWORD:-password}@mongodb:27017/activity_db?authSource=admin
       SPRING_RABBITMQ_HOST: rabbitmq
     depends_on:
@@ -157,7 +157,7 @@ services:
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
       EUREKA_INSTANCE_HOSTNAME: ai-service
-      SPRING_CONFIG_IMPORT: "optional:configserver:http://config-server:8888"
+      SPRING_CONFIG_IMPORT: "configserver:http://config-server:8888"
       SPRING_DATA_MONGODB_URI: mongodb://${MONGO_USER:-root}:${MONGO_PASSWORD:-password}@mongodb:27017/ai_db?authSource=admin
       SPRING_RABBITMQ_HOST: rabbitmq
       GEMINI_API_KEY: ${GEMINI_API_KEY}
