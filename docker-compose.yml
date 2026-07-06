@@ -49,7 +49,7 @@ services:
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD:-password}
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
-      KC_HOSTNAME: https://priyanshu-fitness.duckdns.org
+      KC_HOSTNAME: priyanshu-fitness.duckdns.org
       KC_PROXY_HEADERS: xforwarded
       KC_HTTP_ENABLED: "true"
     ports:
