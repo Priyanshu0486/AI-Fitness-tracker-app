@@ -7,18 +7,30 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: user-service
+        - id: user-service-exact
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/api/users,/api/users/**
-        - id: activity-service
+            - Path=/api/users
+        - id: user-service-sub
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/users/**
+        - id: activity-service-exact
           uri: lb://ACTIVITY-SERVICE
           predicates:
-            - Path=/api/activities,/api/activities/**
-        - id: ai-service
+            - Path=/api/activities
+        - id: activity-service-sub
+          uri: lb://ACTIVITY-SERVICE
+          predicates:
+            - Path=/api/activities/**
+        - id: ai-service-exact
           uri: lb://AI-SERVICE
           predicates:
-            - Path=/api/recommendations,/api/recommendations/**
+            - Path=/api/recommendations
+        - id: ai-service-sub
+          uri: lb://AI-SERVICE
+          predicates:
+            - Path=/api/recommendations/**
 
 eureka:
   instance:
