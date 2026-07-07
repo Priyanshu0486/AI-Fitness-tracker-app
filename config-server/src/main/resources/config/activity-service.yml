@@ -1,9 +1,9 @@
 spring:
-  mongodb:
-    uri: mongodb://localhost:27017/fitnessactivity
-    database: fitnessactivity
+  data:
+    mongodb:
+      uri: mongodb://root:password@mongodb:27017/fitnessactivity?authSource=admin
   rabbitmq:
-    host: localhost
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest
